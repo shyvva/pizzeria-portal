@@ -1,5 +1,13 @@
 @import '../../../styles/settings.scss';
 
 .component {
-  padding: $base-size;
+	padding: 20px;
+}
+
+.formControl {
+  width: 150px;
+}
+
+.productCard {
+  width: 150px;
 }

@@ -2,10 +2,9 @@
 
 .component {
   padding: $base-size;
+  width: 150px;
 }
 
-
-.textField {
-  padding-right: 20px;
-  padding-bottom: 20px;
+.formControl {
+  width: 120px;
 }
