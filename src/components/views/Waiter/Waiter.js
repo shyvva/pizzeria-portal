@@ -15,7 +15,7 @@ class Waiter extends React.Component {
     tables: PropTypes.any,
     loading: PropTypes.shape({
       active: PropTypes.bool,
-      error: PropTypes.oneOfType(PropTypes.bool,PropTypes.string),
+      error: PropTypes.oneOfType([PropTypes.bool,PropTypes.string]),
     }),
   }
 
