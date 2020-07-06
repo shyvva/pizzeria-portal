@@ -33,7 +33,6 @@ server.use(function(req, res, next) {
   }
   next();
 });
-
 server.use(middlewares);
 server.use(router);
 
