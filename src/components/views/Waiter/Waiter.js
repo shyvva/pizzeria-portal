@@ -8,11 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 class Waiter extends React.Component {
   static propTypes = {
-    fetchTables: PropTypes.func,
+    sendStatus: PropTypes.func,
     tables: PropTypes.any,
+    fetchTables: PropTypes.func,
     loading: PropTypes.shape({
       active: PropTypes.bool,
       error: PropTypes.oneOfType([PropTypes.bool,PropTypes.string]),
@@ -23,35 +25,42 @@ class Waiter extends React.Component {
     const { fetchTables } = this.props;
     fetchTables();
   }
+  changeStatus(payload) {
+    // console.log(this.props.tables);
+    const { sendStatus } = this.props;
+    sendStatus(payload);
+    // console.log(this.props.tables.order);
 
-  renderActions(status){
+  }
+
+  renderActions(status, id, order){
     switch (status) {
       case 'free':
         return (
           <>
-            <Button>thinking</Button>
-            <Button>new order</Button>
+            <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'thinking', order: null})}>thinking</Button>
+            <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'ordered', order: order})}>new order</Button>
           </>
         );
       case 'thinking':
         return (
-          <Button>new order</Button>
+          <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'ordered', order: order})}>new order</Button>
         );
       case 'ordered':
         return (
-          <Button>prepared</Button>
+          <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'prepared', order: order})}>prepared</Button>
         );
       case 'prepared':
         return (
-          <Button>delivered</Button>
+          <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'delivered' , order: order})}>delivered</Button>
         );
       case 'delivered':
         return (
-          <Button>paid</Button>
+          <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'paid', order: order})}>paid</Button>
         );
       case 'paid':
         return (
-          <Button>free</Button>
+          <Button onClick={(payload) =>this.changeStatus({ id: id, status: 'free', order: null})}>free</Button>
         );
       default:
         return null;
@@ -60,7 +69,6 @@ class Waiter extends React.Component {
 
   render() {
     const { loading: { active, error }, tables } = this.props;
-
     if(active || !tables.length){
       return (
         <Paper className={styles.component}>
@@ -89,13 +97,14 @@ class Waiter extends React.Component {
             <TableBody>
               {tables.map(row => (
                 <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
+                  <TableCell component='th' scope='row'>
                     {row.id}
                   </TableCell>
                   <TableCell>
-                    {row.status}
+                    <Typography color='secondary' className={styles.status}>{row.status}</Typography>
                   </TableCell>
                   <TableCell>
+                    {console.log(row.order)}
                     {row.order && (
                       <Button to={`${process.env.PUBLIC_URL}/waiter/order/${row.order}`}>
                         {row.order}
@@ -103,7 +112,7 @@ class Waiter extends React.Component {
                     )}
                   </TableCell>
                   <TableCell>
-                    {this.renderActions(row.status)}
+                    {this.renderActions(row.status, row.id, row.order)}
                   </TableCell>
                 </TableRow>
               ))}
